@@ -3,12 +3,6 @@ import tkinter
 import webbrowser
 from tkinter import ttk, messagebox, filedialog
 import json
-
-
-from PfandApplication.wiki import main as WIKI
-from PfandApplication.pfand_scanner import launch_pfand_scanner
-from PfandApplication.updater import open_updater as open_updater, run_silent_update
-
 from PIL import Image, ImageTk
 import os
 import subprocess
@@ -21,6 +15,14 @@ import threading
 import queue
 import numpy as np
 import shutil
+
+# Local Dependencies
+from PfandApplication.wiki import main as WIKI
+from PfandApplication.pfand_scanner import launch_pfand_scanner
+from PfandApplication.updater import open_updater as open_updater, run_silent_update
+from PfandApplication.tgtg_orderchecker import main as tgtg
+from PfandApplication.tgtg_orderchecker import setupkey as tgtg_kt
+
 
 class Achievement:
     def __init__(self, title, description, condition_type, condition_value):
@@ -349,12 +351,9 @@ class PfandCalculator:
 
         label = tk.Label(about_window,
                          text=(
-                             "PfandApp V.7.04.301 ; Könnte einige Versionen hinten sein!\n"
+                             "PfandApp V.8.04.301-PKG1\n\n"
                              "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
                              "Eigene Module: Updater, TGTG_OC, Wiki, BuildUtil\n"
-                             "Großen Dank an SPAR, HOFER\n"
-                             "Daten werden in RootFS gespeichert\n"
-                             "Danke für die Idee --> Österreich"
                          ),
                          padx=10,
                          pady=10,
@@ -371,6 +370,34 @@ class PfandCalculator:
         # Close button
         close_button = tk.Button(about_window, text="Close", command=about_window.destroy)
         close_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+    # TGTG Credits
+    def TGTG_credits(self):
+            about_tgtg = tk.Toplevel(self.root)
+            about_tgtg.title("Über TGTG-OrderChecker")
+            about_tgtg.resizable(True, True)
+            about_tgtg.grid_columnconfigure(0, weight=1)
+            about_tgtg.grid_columnconfigure(1, weight=1)
+            about_tgtg.grid_rowconfigure(0, weight=1)
+
+            label_TGTG = tk.Label(
+                about_tgtg,
+                text="TooGoodToGo OrderChecker\nOriginalerweiße: https://github.com/ZockerKatze/tgtg_orderchecker\nV1.102.202 (PfandVersion-PKG)",
+                padx=10,
+                pady=10,
+                justify="center",
+                anchor="center"
+            )
+            label_TGTG.grid(row=0, column=0, columnspan=2, pady=10, sticky="nsew")
+
+            url_TGTG = "https://github.com/ZockerKatze/tgtg_orderchecker"
+
+            # Website button
+            website_button_TGTG = tk.Button(about_tgtg, text="View Repo In Browser", command=lambda: webbrowser.open(url_TGTG))
+            website_button_TGTG.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+
+            # Close button
+            close_button = tk.Button(about_tgtg, text="Close", command=about_tgtg.destroy)
+            close_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
     def update_credits(self): # Credits for the Updater Application (not some update function for some credits) || Rewrote this in Version 7.04.101 => Inconsistency is key
         about_update = tk.Toplevel(self.root)
@@ -478,6 +505,14 @@ class PfandCalculator:
         products_menu.add_command(label="Produkt hinzufügen", command=self.show_add_product_window, accelerator="Strg+P")
         products_menu.add_command(label="Produkte verwalten", command=self.show_manage_products_window, accelerator="Strg+Shift+P")
 
+        # TGTG Menu (used to not exist)
+        
+        tgtg_menu = tk.Menu(self.menubar, tearoff=0)
+        self.menubar.add_cascade(label="TGTG", menu=tgtg_menu)
+        tgtg_menu.add_command(label="Öffne TGTG-OC", command=tgtg.start_tgtg, accelerator="Strg+F12")
+        tgtg_menu.add_command(label="Öffne KeyTool", command=tgtg_kt.ask_for_tokens, accelerator="Strg+F11")
+        tgtg_menu.add_separator()
+        tgtg_menu.add_command(label="Über TGTG", command=self.TGTG_credits) # No keybind , why tf would you need one anyways
 
         update_menu = tk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Updater", menu=update_menu)
@@ -499,8 +534,8 @@ class PfandCalculator:
         self.root.bind('<Control-F2>', lambda e: self.handle_shift_f2(e))
         self.root.bind('<Control-F6>', lambda e: self.show_achievements())
         self.root.bind('<Control-F7>', lambda e: self.delete_achievements())
-        self.root.bind('<Control-F12>', lambda e: start_tgtg(self.root))
-        self.root.bind('<Control-F11>', lambda e: ask_for_tokens())
+        self.root.bind('<Control-F12>', lambda e: tgtg.start_tgtg(self.root))
+        self.root.bind('<Control-F11>', lambda e: tgtg_kt.ask_for_tokens())
         self.root.bind('<Control-F10>', lambda e: self.create_credits())
         self.root.bind('<Control-E>', lambda e: self.export_barcodes_csv() if e.state & 0x1 else self.export_history_csv())
         self.root.bind('<Control-p>', lambda e: self.show_add_product_window())

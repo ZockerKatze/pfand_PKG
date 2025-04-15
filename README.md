@@ -1,6 +1,6 @@
-# ♻️ Pfandrechner Application Suite
+# ♻️ Pfandrechner
 
-**Version:** V.7.04.301  
+**Version:** V.8.04.301-PKG1
 **License:** [MIT](LICENSE)
 
 Welcome to the **Pfandrechner Application - Package** – a sleek and powerful tool for tracking and calculating container deposits ("Pfand") in Austria 🇦🇹. Whether you're returning a few bottles or managing full bags, this app has you covered!
@@ -17,6 +17,8 @@ This is a copy of [Pfand](https://github.com/ZockerKatze/pfand), but this is in 
 
 📜 **History & Exports** – View your past returns and export the data for safekeeping or bragging rights.
 
+📦 **TGTG Integration** – Check on your "Too Good To Go" orders directly within the app. ( You need to setup your API Key first! )
+
 ⚙️ **Smart Updater** – Keeps the app fresh with the latest features and fixes.
 
 ---
@@ -26,7 +28,7 @@ This is a copy of [Pfand](https://github.com/ZockerKatze/pfand), but this is in 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ZockerKatze/pfand.git
+git clone https://github.com/ZockerKatze/pfand_PKG.git
 cd pfand
 ```
 
