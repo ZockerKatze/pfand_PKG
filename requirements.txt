@@ -1,0 +1,7 @@
+Pillow
+tgtg
+requests
+tkcalendar
+opencv-python
+pyzbar
+numpy 
