@@ -17,8 +17,6 @@ This is a copy of [Pfand](https://github.com/ZockerKatze/pfand), but this is in 
 
 📜 **History & Exports** – View your past returns and export the data for safekeeping or bragging rights.
 
-📦 **TGTG Integration** – Check on your "Too Good To Go" orders directly within the app. ( You need to setup your API Key first! )
-
 ⚙️ **Smart Updater** – Keeps the app fresh with the latest features and fixes.
 
 ---

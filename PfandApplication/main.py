@@ -349,7 +349,7 @@ class PfandCalculator:
 
         label = tk.Label(about_window,
                          text=(
-                             "PfandApp V.7.04.301\n"
+                             "PfandApp V.7.04.301 ; Könnte einige Versionen hinten sein!\n"
                              "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
                              "Eigene Module: Updater, TGTG_OC, Wiki, BuildUtil\n"
                              "Großen Dank an SPAR, HOFER\n"

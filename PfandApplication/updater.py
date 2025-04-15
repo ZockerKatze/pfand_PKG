@@ -10,7 +10,7 @@ import tempfile
 import traceback
 import threading
 
-GITHUB_REPO_ZIP = "https://github.com/ZockerKatze/pfand/archive/refs/heads/main.zip"
+GITHUB_REPO_ZIP = "https://github.com/ZockerKatze/pfand_PKG/archive/refs/heads/main.zip"
 IGNORED_FILES = {"key.py"}
 
 class GitHubUpdater(tk.Toplevel):

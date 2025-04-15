@@ -1,3 +1,5 @@
+# µScan
+
 import tkinter as tk
 from tkinter import ttk, simpledialog, messagebox
 import cv2
