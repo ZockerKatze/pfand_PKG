@@ -10,7 +10,7 @@ def select_file(callback=None):
         if choice == "Wiki":
             open_wiki()
         else:
-            filename = os.path.join("wiki", "listeSPAR.csv" if choice == "SPAR" else "listeHOFER.csv")
+            filename = os.path.join("PfandApplication/wiki", "listeSPAR.csv" if choice == "SPAR" else "listeHOFER.csv")
             if callback:
                 callback(filename)
             else:
@@ -112,7 +112,7 @@ def open_wiki():
     text_area = tk.Text(wiki_window, wrap=tk.WORD)
     text_area.pack(expand=True, fill=tk.BOTH)
     
-    filename = os.path.join("wiki", "wiki.md")
+    filename = os.path.join("PfandApplication/wiki", "wiki.md")
     
     try:
         with open(filename, "r", encoding="utf-8") as file:
