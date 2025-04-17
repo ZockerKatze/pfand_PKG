@@ -1,46 +1,61 @@
-# ♻️ Pfandrechner
+# ♻️ Pfandrechner – Python Package
 
 **Version:** V.8.04.301-PKG1
-**License:** [MIT](LICENSE)
+**License:**[MIT]()
 
-Welcome to the **Pfandrechner Application - Package** – a sleek and powerful tool for tracking and calculating container deposits ("Pfand") in Austria 🇦🇹. Whether you're returning a few bottles or managing full bags, this app has you covered!
+> ⚠️ **Note:** This package is based on the original [`pfand`](https://github.com/ZockerKatze/pfand) application, which has now been **archived**.
+> This repo (`pfand_PKG`) continues the project in a modular and importable format, ideal for integration into your own Python workflows.
 
-This is a copy of [Pfand](https://github.com/ZockerKatze/pfand), but this is in Package Form which can be **imported** and integrated!
-
----
-
-## ✨ Features
-
-🔢 **Deposit Calculator** – Instantly compute the total value of your returned bottles and cans.
-
-🏆 **Achievements** – Track your progress and unlock fun rewards for your deposit milestones.
-
-📜 **History & Exports** – View your past returns and export the data for safekeeping or bragging rights.
-
-📦 **TGTG Integration** – Check on your "Too Good To Go" orders directly within the app. ( You need to setup your API Key first! )
-
-⚙️ **Smart Updater** – Keeps the app fresh with the latest features and fixes.
+Welcome to the **Pfandrechner Package** – a modular and importable version of Austria’s beloved container deposit ("Pfand") calculator. This package allows developers to seamlessly integrate Pfand logic into their own Python projects.
 
 ---
 
-## 🚀 Getting Started
+## 📦 What’s Inside
+
+This package retains the core functionalities of the original application, including:
+
+* 🔢 **Deposit Calculator** – Compute the total value of returned bottles and cans.
+* 🏆 **Achievements** – Monitor progress and unlock rewards for deposit milestones.
+* 📜 **History & Exports** – Access past returns and export data.
+* 📦 **TGTG Integration** – Connect with "Too Good To Go" orders (API key setup required).
+* ⚙️ **Smart Updater** – Ensure the package stays updated with the latest features and fixes.
+
+---
+
+## 🚀 Installation
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ZockerKatze/pfand_PKG.git
-cd pfand
+cd pfand_PKG
 ```
 
-### 2. Install Dependencies
+### 2. Create and Activate a Virtual Environment (Recommended)
 
-Make sure you’re using Python 3, then run:
+#### On macOS/Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+#### On Windows:
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Launch the App
+### 4. Launch or Integrate
+
+You can now use the package by importing it into your own Python projects, or run the provided entry script if applicable:
 
 ```bash
 python run.py
@@ -48,26 +63,29 @@ python run.py
 
 ---
 
-## 🧮 How to Count
+## 🧮 Usage
 
-You can either:
+You have two options for counting:
 
-- ✍️ **Manually** count and enter your container numbers  
-  _OR_  
-- 🔬 Use **µScan** – the improved scanner for fast and accurate counting with barcode recognition using _pyzbar_!
+* ✍️ **Manual Entry** – Input container numbers directly.
+* 🔬 **µScan** – Utilize the enhanced scanner with barcode recognition powered by `pyzbar`.
 
 ---
 
 ## 🤝 Contributing
 
-Want to improve the app or add new features? Awesome!  
-Fork the repo, make your changes, and send a pull request. 💡
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Commit your changes.
+4. Submit a pull request for review.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE]() file for details.
 
 ---
 

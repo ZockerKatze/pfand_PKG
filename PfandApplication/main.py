@@ -1,7 +1,6 @@
 import tkinter as tk
-import tkinter
-import webbrowser
 from tkinter import ttk, messagebox, filedialog
+import webbrowser
 import json
 from PIL import Image, ImageTk
 import os
@@ -22,7 +21,6 @@ from PfandApplication.pfand_scanner import launch_pfand_scanner
 from PfandApplication.updater import open_updater as open_updater, run_silent_update
 from PfandApplication.tgtg_orderchecker import main as tgtg
 from PfandApplication.tgtg_orderchecker import setupkey as tgtg_kt
-
 
 class Achievement:
     def __init__(self, title, description, condition_type, condition_value):
@@ -426,7 +424,7 @@ class PfandCalculator:
         close_button = tk.Button(about_update, text="Close", command=about_update.destroy)
         close_button.grid(row=1, column=0, sticky='ew', padx=10, pady=(0, 10))
     
-    def µScan_credits(self):
+    def µScan_credits(self, about_μScan=None, label_μScan_app=None):
         about_µScan = tk.Toplevel(self.root)
         about_μScan.title("Über µScan")
         about_μScan.geometry("650x190")
