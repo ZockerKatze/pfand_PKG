@@ -338,51 +338,85 @@ class PfandCalculator:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-    # Credit Section (Overall made nicer in Version 7.04.001) || Changed up a bit in V7.04.101
-
-    def create_credits(self):
+    # Credit Section (Overall made nicer in Version 7.04.001) || Changed up a LOT in V8.05.501 (Pineapple)
+    def create_credits(self, future_icons):
         about_window = tk.Toplevel(self.root)
         about_window.title("Über Programm")
         about_window.resizable(True, True)
 
-        # Configure grid weights so widgets expand properly | This is some new Stuff!
+        # Grid configuration
         about_window.grid_columnconfigure(0, weight=1)
         about_window.grid_columnconfigure(1, weight=1)
         about_window.grid_rowconfigure(0, weight=1)
 
-        label = tk.Label(about_window,
-                         text=(
-                             "PfandApp V.8.04.301-PKG1\n\n"
-                             "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
-                             "Eigene Module: Updater, TGTG_OC, Wiki, BuildUtil\n"
-                         ),
-                         padx=10,
-                         pady=10,
-                         justify="center", 
-                         anchor="center")
-        label.grid(row=0, column=0, columnspan=2, pady=10, sticky="nsew")
+        image_path = os.path.join(os.getcwd(), "PfandApplication", "images", "versions", "pineapple.png")
+
+        try:
+            img = Image.open(image_path).convert("RGBA")
+
+            bg_color_hex = about_window.cget("bg")
+            bg_color_rgb = about_window.winfo_rgb(bg_color_hex)
+            bg_color_rgba = tuple(c // 256 for c in bg_color_rgb) + (255,)
+
+            background = Image.new("RGBA", img.size, bg_color_rgba)
+            img = Image.alpha_composite(background, img)
+            img = img.resize((100, 100), Image.Resampling.LANCZOS)
+            pineapple_img = ImageTk.PhotoImage(img)
+
+            img_label = tk.Label(about_window, image=pineapple_img)
+            img_label.image = pineapple_img
+            img_label.grid(row=0, column=0, columnspan=2, pady=(15, 5))
+        except Exception as e:
+            print(f"Fehler beim Laden des Bildes: {e}")
+
+        # Info label
+        label = tk.Label(
+            about_window,
+            text=(
+                "PfandApp V.8.05.501 - 'Pineapple'\n"
+                "PaketVersion 1.1  ( PKG1.1 )\n\n"
+                "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
+            ),
+            padx=10,
+            pady=10,
+            justify="center",
+            anchor="center"
+        )
+        label.grid(row=1, column=0, columnspan=2, pady=0, sticky="nsew")
 
         url = "https://zockerkatze.github.io/ZockerKatze/"
-        
+        url_future_icons = "https://www.svgrepo.com/svg/266606/watermelon"
+
         # Website button
-        website_button = tk.Button(about_window, text="WebSite", command=lambda: webbrowser.open(url))
-        website_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        website_button = tk.Button(about_window, text="Webseite", command=lambda: webbrowser.open(url))
+        website_button.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+
+        if future_icons:
+            future_icon_button = tk.Button(about_window, text="Futur-Icons", command=lambda: webbrowser.open(url_future_icons))
+            future_icon_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
+        else:
+            future_icon_button = None
 
         # Close button
-        close_button = tk.Button(about_window, text="Close", command=about_window.destroy)
-        close_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+        close_button = tk.Button(about_window, text="Schließen", command=about_window.destroy)
+        close_button.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
+
     # TGTG Credits
     def TGTG_credits(self):
             about_tgtg = tk.Toplevel(self.root)
             about_tgtg.title("Über TGTG-OrderChecker")
             about_tgtg.resizable(True, True)
+
             about_tgtg.grid_columnconfigure(0, weight=1)
             about_tgtg.grid_columnconfigure(1, weight=1)
             about_tgtg.grid_rowconfigure(0, weight=1)
 
             label_TGTG = tk.Label(
                 about_tgtg,
-                text="TooGoodToGo OrderChecker\nOriginalerweiße: https://github.com/ZockerKatze/tgtg_orderchecker\nV1.102.202 (PfandVersion-PKG)",
+                text=(
+                    "PV2-PKG1 - ( PfandVersion 2 - Package 1 )\n\n"
+                    "TooGoodToGo OrderChecker\n"
+                    ),
                 padx=10,
                 pady=10,
                 justify="center",
@@ -400,7 +434,7 @@ class PfandCalculator:
             close_button = tk.Button(about_tgtg, text="Close", command=about_tgtg.destroy)
             close_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
-    def update_credits(self): # Credits for the Updater Application (not some update function for some credits) || Rewrote this in Version 7.04.101 => Inconsistency is key
+    def update_credits(self): # Credits for the Updater Application (not some update function for some credits) || Rewrote this in Version Pineapple => Inconsistency is key
         about_update = tk.Toplevel(self.root)
         about_update.title("Über UpdaterApp")
         about_update.geometry("650x190")
@@ -413,7 +447,7 @@ class PfandCalculator:
         label_update_app = tk.Label(
             about_update,
             text=(
-                "Updater App für PfandApp\n"
+                "Updater App für PfandApp - (PKG1)\n"
                 "Version 1.200.000\n"
                 "Diese Updater App nutzt das GitHub Repository, um die App zu updaten.\n"
                 "Nach Updates sollte die App neugestartet (oder reloaded, bei UI) werden.\n"
@@ -469,7 +503,7 @@ class PfandCalculator:
         file_menu.add_command(label="Öffne PfandListe", command=wiki.select_file, accelerator="Strg+L")
         file_menu.add_command(label="Beenden", command=self.root.quit, accelerator="Strg+Q")
         file_menu.add_separator()
-        file_menu.add_command(label="Über Programm", command=self.create_credits, accelerator="Strg+F10")
+        file_menu.add_command(label="Über Programm", command=lambda: self.create_credits(False), accelerator="Strg+F10") # Else this will autolaunch (wo lambda)
 
         # Deposit Menu
 
@@ -513,7 +547,7 @@ class PfandCalculator:
         tgtg_menu.add_command(label="Öffne TGTG-OC", command=tgtg.start_tgtg, accelerator="Strg+F12")
         tgtg_menu.add_command(label="Öffne KeyTool", command=tgtg_kt.ask_for_tokens, accelerator="Strg+F11")
         tgtg_menu.add_separator()
-        tgtg_menu.add_command(label="Über TGTG", command=self.TGTG_credits) # No keybind , why tf would you need one anyways
+        tgtg_menu.add_command(label="Über TGTG", command=self.TGTG_credits) # No keybind , why tf would you need one anyway
 
         update_menu = tk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Updater", menu=update_menu)
@@ -537,7 +571,7 @@ class PfandCalculator:
         self.root.bind('<Control-F7>', lambda e: self.delete_achievements())
         self.root.bind('<Control-F12>', lambda e: tgtg.start_tgtg(self.root))
         self.root.bind('<Control-F11>', lambda e: tgtg_kt.ask_for_tokens())
-        self.root.bind('<Control-F10>', lambda e: self.create_credits())
+        self.root.bind('<Control-F10>', lambda e: self.create_credits(False)) # True this will show future Icons
         self.root.bind('<Control-E>', lambda e: self.export_barcodes_csv() if e.state & 0x1 else self.export_history_csv())
         self.root.bind('<Control-p>', lambda e: self.show_add_product_window())
         self.root.bind('<Control-P>', lambda e: self.show_manage_products_window() if e.state & 0x1 else self.show_add_product_window())
