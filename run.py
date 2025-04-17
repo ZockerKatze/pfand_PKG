@@ -1,15 +1,14 @@
 from PfandApplication import main
+if __name__ == "__main__": main.PfandCalculator.launch(False)
 
 """
 
-If the function launch gets called with
-
-False -> No autoupdates will be run || Best for Debugging!
-
-True -> Autoupdates will be run
+/********************************************
+*        Launch Function Parameters         *
+*                                           *
+*   True    ->      Auto-Update             *
+*   False   ->      Dont Auto-Update        *
+*   None    ->      Idk check it :3         *
+********************************************/
 
 """
-
-
-if __name__ == "__main__":
-    main.PfandCalculator.launch(False)

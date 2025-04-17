@@ -16,7 +16,7 @@ import numpy as np
 import shutil
 
 # Local Dependencies
-from PfandApplication.wiki import main as WIKI
+from PfandApplication.wiki import main as wiki
 from PfandApplication.pfand_scanner import launch_pfand_scanner
 from PfandApplication.updater import open_updater as open_updater, run_silent_update
 from PfandApplication.tgtg_orderchecker import main as tgtg
@@ -33,6 +33,7 @@ class Achievement:
 
 class PfandCalculator:
     def __init__(self, root):
+        self.achievement_image_gray = None
         self.root = root
         self.root.title("Österreichischer Pfandrechner")
         
@@ -63,7 +64,8 @@ class PfandCalculator:
         
         self.achievement_image = self.load_achievement_image()
 
-    def load_image(self, product_name):
+    @staticmethod
+    def load_image(product_name):
         try:
             # Use Flaschen icon for Bierflasche
             if product_name == "Bierflasche":
@@ -115,7 +117,8 @@ class PfandCalculator:
             print(f"Error loading achievement image: {e}")
             return None
 
-    def initialize_achievements(self):
+    @staticmethod
+    def initialize_achievements():
         return {
             "each_100": Achievement("Krass, Weiter So!", "Du hast bis jetzt 100 von jedem Element gesammelt!", "each_element", 100),
             "each_500": Achievement("Adlersson wäre neidisch!", "Adlersson wäre neidisch auf dich! Du hast 500 von jedem Element gesammelt!", "each_element", 500),
@@ -463,7 +466,7 @@ class PfandCalculator:
         file_menu.add_command(label="Neulanden der UI", command=self.recreate_widgets, accelerator="Strg+R")
         file_menu.add_command(label="Updater", command=open_updater, accelerator="Strg+U") # Added this to the File Menu too!
         file_menu.add_separator()
-        file_menu.add_command(label="Öffne PfandListe", command=WIKI.select_file, accelerator="Strg+L")
+        file_menu.add_command(label="Öffne PfandListe", command=wiki.select_file, accelerator="Strg+L")
         file_menu.add_command(label="Beenden", command=self.root.quit, accelerator="Strg+Q")
         file_menu.add_separator()
         file_menu.add_command(label="Über Programm", command=self.create_credits, accelerator="Strg+F10")
@@ -538,7 +541,7 @@ class PfandCalculator:
         self.root.bind('<Control-E>', lambda e: self.export_barcodes_csv() if e.state & 0x1 else self.export_history_csv())
         self.root.bind('<Control-p>', lambda e: self.show_add_product_window())
         self.root.bind('<Control-P>', lambda e: self.show_manage_products_window() if e.state & 0x1 else self.show_add_product_window())
-        self.root.bind('<Control-l>', lambda e: WIKI.select_file())
+        self.root.bind('<Control-l>', lambda e: wiki.select_file())
         self.root.bind('<Control-r>', lambda e: self.recreate_widgets())
         self.root.bind('<Control-u>', lambda e: open_updater()) # New Update Feature (Version 7.4.000 UPDATER)
 
@@ -741,7 +744,7 @@ class PfandCalculator:
 
         def confirm_deposit():
             date = date_picker.get_date().strftime("%d.%m.%Y")
-            current_total = sum(self.quantities[product] * self.PRICES[product] 
+            current_total = sum(self.quantities[product] * self.PRICES[product]
                               for product in self.products)
             
             deposit_record = {
@@ -1564,12 +1567,14 @@ class PfandCalculator:
      root = tk.Tk()
      app = PfandCalculator(root)
      
-     if check_for_update == True:
-        root.after(1, run_silent_update) # Run uc on start (1s delay) => updater.py module || UNCOMMENT IN PROD
-     else:
+     if check_for_update is None:
+        root.after(500, root.destroy) # We do a lil bit of Trolling here
+     elif not check_for_update:
          pass
+     else:
+         root.after(1, run_silent_update)
 
      root.mainloop()
 
-if __name__ == "__main__":
-    PfandCalculator.launch(True)
+# Run AutoUpdates by default
+if __name__ == "__main__": PfandCalculator.launch(True)
