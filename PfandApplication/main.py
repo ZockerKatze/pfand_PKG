@@ -556,7 +556,6 @@ class PfandCalculator:
         update_menu.add_command(label="Über Updater", command=self.update_credits) # Also no keybind here, same reason as the tgtg one #V7.4.001
 
         # Manage Keybinds
-
         self.root.bind('<Control-s>', lambda e: self.save_quantities())
         self.root.bind('<Control-o>', lambda e: self.open_file_location())
         self.root.bind('<Control-q>', lambda e: self.root.quit())
@@ -571,7 +570,7 @@ class PfandCalculator:
         self.root.bind('<Control-F7>', lambda e: self.delete_achievements())
         self.root.bind('<Control-F12>', lambda e: tgtg.start_tgtg(self.root))
         self.root.bind('<Control-F11>', lambda e: tgtg_kt.ask_for_tokens())
-        self.root.bind('<Control-F10>', lambda e: self.create_credits(False)) # True this will show future Icons
+        self.root.bind('<Control-Shift-C>', lambda e: self.create_credits(False)) # True this will show future Icons
         self.root.bind('<Control-E>', lambda e: self.export_barcodes_csv() if e.state & 0x1 else self.export_history_csv())
         self.root.bind('<Control-p>', lambda e: self.show_add_product_window())
         self.root.bind('<Control-P>', lambda e: self.show_manage_products_window() if e.state & 0x1 else self.show_add_product_window())
