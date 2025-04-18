@@ -1,5 +1,4 @@
-# µScan
-
+# µScan V2.1.0
 import tkinter as tk
 from tkinter import ttk, simpledialog, messagebox
 import cv2
@@ -126,33 +125,36 @@ class PfandScanner:
         return binary
 
     def process_video(self):
-        ret, frame = self.cap.read()
-        if ret:
-            if not self.autofocus_var.get():
-                self.cap.set(cv2.CAP_PROP_FOCUS, self.focus_slider.get())
+        try:
+            ret, frame = self.cap.read()
+            if ret:
+                if not self.autofocus_var.get():
+                    self.cap.set(cv2.CAP_PROP_FOCUS, self.focus_slider.get())
 
-            processed_frame = self.adjust_image(frame)
-            barcodes = decode(processed_frame) or decode(frame)
+                processed_frame = self.adjust_image(frame)
+                barcodes = decode(processed_frame) or decode(frame)
 
-            for barcode in barcodes:
-                points = barcode.polygon
-                if len(points) == 4:
-                    pts = [(p.x, p.y) for p in points]
-                    cv2.polylines(frame, [cv2.convexHull(cv2.UMat(cv2.Mat(pts))).get()], True, (0, 255, 0), 2)
-                barcode_data = barcode.data.decode('utf-8')
-                self.queue.put(barcode_data)
+                for barcode in barcodes:
+                    points = barcode.polygon
+                    if len(points) == 4:
+                        pts = [(p.x, p.y) for p in points]
+                        cv2.polylines(frame, [cv2.convexHull(cv2.UMat(cv2.Mat(pts))).get()], True, (0, 0, 255), 2)
+                    barcode_data = barcode.data.decode('utf-8')
+                    self.queue.put(barcode_data)
 
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-            img = Image.fromarray(cv2image)
-            imgtk = ImageTk.PhotoImage(image=img)
-            self.camera_label.imgtk = imgtk
-            self.camera_label.configure(image=imgtk)
+                cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+                img = Image.fromarray(cv2image)
+                imgtk = ImageTk.PhotoImage(image=img)
+                self.camera_label.imgtk = imgtk
+                self.camera_label.configure(image=imgtk)
+        except Exception as e:
+            print(f"Error in processing video: {e}")
 
-        self.window.after(10, self.process_video)
+        self.window.after(100, self.process_video)
 
     def show_product_selection(self, barcode_data):
         if hasattr(self, 'product_win') and self.product_win.winfo_exists():
-            return  # prevent multiple dialogs
+            return
 
         self.product_win = tk.Toplevel(self.window)
         self.product_win.title("Produktwahl")
@@ -176,38 +178,40 @@ class PfandScanner:
 
     def process_queue(self):
         try:
-            while True:
-                barcode_data = self.queue.get_nowait()
-                now = datetime.now()
+            barcode_data = self.queue.get(timeout=0.1)
 
-                if barcode_data in self.barcode_times:
-                    timestamps = self.barcode_times[barcode_data]
-                    timestamps = [t for t in timestamps if now - t <= timedelta(seconds=20)]
-                    if len(timestamps) >= 10:
-                        continue
-                    timestamps.append(now)
-                    self.barcode_times[barcode_data] = timestamps
-                else:
-                    self.barcode_times[barcode_data] = [now]
+            now = datetime.now()
 
-                current_time = now.strftime("%Y-%m-%d %H:%M:%S")
-                if len(barcode_data) == 13:
-                    pfand_type = "EINWEG"
-                elif len(barcode_data) == 8:
-                    pfand_type = "MEHRWEG"
-                else:
-                    pfand_type = "DOSE"
-                deposit = self.pfand_values.get(pfand_type, 0.00)
-                self.tree.insert("", 0, values=(current_time, barcode_data, pfand_type, f"{deposit:.2f}"))
+            if barcode_data in self.barcode_times:
+                timestamps = self.barcode_times[barcode_data]
+                timestamps = [t for t in timestamps if now - t <= timedelta(seconds=5)]
+                if len(timestamps) >= 3:
+                    return
+                timestamps.append(now)
+                self.barcode_times[barcode_data] = timestamps
+            else:
+                self.barcode_times[barcode_data] = [now]
 
-                if barcode_data not in self.prompted_barcodes:
-                    self.prompted_barcodes.add(barcode_data)
-                    self.window.after(0, self.show_product_selection, barcode_data)
+            current_time = now.strftime("%Y-%m-%d %H:%M:%S")
+            if len(barcode_data) == 13:
+                pfand_type = "EINWEG"
+            elif len(barcode_data) == 8:
+                pfand_type = "MEHRWEG"
+            else:
+                pfand_type = "DOSE"
+            deposit = self.pfand_values.get(pfand_type, 0.00)
+            self.tree.insert("", 0, values=(current_time, barcode_data, pfand_type, f"{deposit:.2f}"))
+
+            if barcode_data not in self.prompted_barcodes:
+                self.prompted_barcodes.add(barcode_data)
+                self.window.after(0, self.show_product_selection, barcode_data)
 
         except queue.Empty:
             pass
+        except Exception as e:
+            print(f"Error in queue processing: {e}")
         finally:
-            self.window.after(100, self.process_queue)
+            self.window.after(100, self.process_queue)  # freez delay
 
     def on_closing(self):
         if self.cap.isOpened():
@@ -217,4 +221,4 @@ class PfandScanner:
 if __name__ != "__main__":
     def launch_pfand_scanner():
         scanner_window = tk.Toplevel()
-        PfandScanner(scanner_window, "µScan V1.1.0")
+        PfandScanner(scanner_window, "µScan V2.1.0")
