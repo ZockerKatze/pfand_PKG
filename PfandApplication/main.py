@@ -403,47 +403,92 @@ class PfandCalculator:
 
     # TGTG Credits
     def TGTG_credits(self):
-            about_tgtg = tk.Toplevel(self.root)
-            about_tgtg.title("Über TGTG-OrderChecker")
-            about_tgtg.resizable(True, True)
+        about_tgtg = tk.Toplevel(self.root)
+        about_tgtg.title("Über TGTG-OrderChecker")
+        about_tgtg.resizable(True, True)
 
-            about_tgtg.grid_columnconfigure(0, weight=1)
-            about_tgtg.grid_columnconfigure(1, weight=1)
-            about_tgtg.grid_rowconfigure(0, weight=1)
+        for col in range(2):
+            about_tgtg.grid_columnconfigure(col, weight=1)
+        about_tgtg.grid_rowconfigure(0, weight=1)
 
-            label_TGTG = tk.Label(
-                about_tgtg,
-                text=(
-                    "PV2-PKG1 - ( PfandVersion 2 - Package 1 )\n\n"
-                    "TooGoodToGo OrderChecker\n"
-                    ),
-                padx=10,
-                pady=10,
-                justify="center",
-                anchor="center"
-            )
-            label_TGTG.grid(row=0, column=0, columnspan=2, pady=10, sticky="nsew")
+        image_path = os.path.join(os.getcwd(), "PfandApplication", "images", "versions", "tgtg.png")
 
-            url_TGTG = "https://github.com/ZockerKatze/tgtg_orderchecker"
+        try:
+            img = Image.open(image_path).convert("RGBA")
+            bg_color_hex = about_tgtg.cget("bg")
+            bg_color_rgb = about_tgtg.winfo_rgb(bg_color_hex)
+            bg_color_rgba = tuple(c // 256 for c in bg_color_rgb) + (255,)
 
-            # Website button
-            website_button_TGTG = tk.Button(about_tgtg, text="View Repo In Browser", command=lambda: webbrowser.open(url_TGTG))
-            website_button_TGTG.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+            blended = Image.new("RGBA", img.size, bg_color_rgba)
+            img = Image.alpha_composite(blended, img)
+            img = img.resize((100, 100), Image.Resampling.LANCZOS)
 
-            # Close button
-            close_button = tk.Button(about_tgtg, text="Close", command=about_tgtg.destroy)
-            close_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+            tgtg_img = ImageTk.PhotoImage(img)
 
-    def update_credits(self): # Credits for the Updater Application (not some update function for some credits) || Rewrote this in Version Pineapple => Inconsistency is key
+            # Prevent Garbage Collection ( WHY PYTHON, WHY? )
+            about_tgtg.tgtg_img = tgtg_img
+
+            img_label = tk.Label(about_tgtg, image=tgtg_img)
+            img_label.grid(row=0, column=0, columnspan=2, pady=(15, 5), sticky='n')
+        except Exception as e:
+            print(f"Fehler beim Laden des Bildes: {e}")
+
+        label_TGTG = tk.Label(
+            about_tgtg,
+            text=(
+                "PV2-PKG1 - ( PfandVersion 2 - Package 1 )\n"
+                "\nTooGoodToGo OrderChecker"
+            ),
+            padx=10,
+            pady=10,
+            justify="center",
+            anchor="center"
+        )
+        label_TGTG.grid(row=1, column=0, columnspan=2, sticky="nsew")
+
+        url_TGTG = "https://github.com/ZockerKatze/tgtg_orderchecker"
+
+        website_button = tk.Button(about_tgtg, text="Öffne Repository im Browser", command=lambda: webbrowser.open(url_TGTG))
+        website_button.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+
+        close_button = tk.Button(about_tgtg, text="Schließen", command=about_tgtg.destroy)
+        close_button.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
+
+    def update_credits(self):
         about_update = tk.Toplevel(self.root)
         about_update.title("Über UpdaterApp")
-        about_update.geometry("650x190")
+        about_update.geometry("650x350")
 
-        about_update.grid_columnconfigure(0, weight=1)  # horizont
-        about_update.grid_rowconfigure(0, weight=1)     # vertically
-        about_update.grid_rowconfigure(1, weight=0)     # tight :3 (OwO)
+        # Grid configuration for responsiveness
+        about_update.grid_columnconfigure(0, weight=1)
+        about_update.grid_columnconfigure(1, weight=1)
+        about_update.grid_rowconfigure(0, weight=1)
+        about_update.grid_rowconfigure(1, weight=1)
+        about_update.grid_rowconfigure(2, weight=0)
 
-        # Text content
+        # Load and process image
+        image_path = os.path.join(os.getcwd(), "PfandApplication", "images", "versions", "updates.png")
+
+        try:
+            img = Image.open(image_path).convert("RGBA")
+
+            bg_color_hex = about_update.cget("bg")
+            bg_color_rgb = about_update.winfo_rgb(bg_color_hex)
+            bg_color_rgba = tuple(c // 256 for c in bg_color_rgb) + (255,)
+
+            background = Image.new("RGBA", img.size, bg_color_rgba)
+            img = Image.alpha_composite(background, img)
+            img = img.resize((100, 100), Image.Resampling.LANCZOS)
+            update_img = ImageTk.PhotoImage(img)
+
+            # Garbage Collection
+            about_update.update_img = update_img
+
+            img_label = tk.Label(about_update, image=update_img)
+            img_label.grid(row=0, column=0, columnspan=2, pady=(15, 5), sticky='n')
+        except Exception as e:
+            print(f"Fehler beim Laden des Bildes: {e}")
+
         label_update_app = tk.Label(
             about_update,
             text=(
@@ -453,38 +498,70 @@ class PfandCalculator:
                 "Nach Updates sollte die App neugestartet (oder reloaded, bei UI) werden.\n"
                 "Beim Starten der App wird nach Updates gesucht!"
             ),
-            justify="left", anchor="center"
+            justify="left",
+            anchor="center",
+            wraplength=600
         )
-        label_update_app.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+        label_update_app.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=10, pady=10)
 
-        # Close button at the bottom (like u) :3
-        close_button = tk.Button(about_update, text="Close", command=about_update.destroy)
-        close_button.grid(row=1, column=0, sticky='ew', padx=10, pady=(0, 10))
-    
-    def µScan_credits(self, about_μScan=None, label_μScan_app=None):
-        about_µScan = tk.Toplevel(self.root)
-        about_μScan.title("Über µScan")
-        about_μScan.geometry("650x190")
+        # Buttons
+        url = "https://github.com/ZockerKatze/pfand_PKG"
 
-        about_μScan.grid_columnconfigure(0, weight=1)
-        about_μScan.grid_rowconfigure(0, weight=1)
-        about_μScan.grid_rowconfigure(1, weight=0)
+        close_button = tk.Button(about_update, text="Schließen", command=about_update.destroy)
+        close_button.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
 
-        label_µScan_app = tk.Label(
-                about_μScan,
-                text=(
-                    "µScan - Der bessere Barcode Scanner\n"
-                    "Version 1.1.0\n"
-                    "µScan erfordert einen UI Reload (Strg+R) in der Root Anwendung\n"
-                    "µScan ist für mehrere Barcodes gemacht, die in einer kurzen Zeit gescannt werden sollten\n"
-                    ),
-                    justify="left", anchor="center"
-                )
-        label_μScan_app.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        
-        close_button = tk.Button(about_µScan, text="Close", command=about_μScan.destroy)
-        close_button.grid(row=1, column=0, sticky='ew', padx=10, pady=(0, 10))
- 
+        open_repo_button = tk.Button(about_update, text="Öffne Update-Repository", command=lambda: webbrowser.open(url))
+        open_repo_button.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
+
+    def uscan_credits(self):
+        about_uscan = tk.Toplevel(self.root)
+        about_uscan.title("Über µScan")
+        about_uscan.geometry("650x290")
+
+        about_uscan.grid_columnconfigure(0, weight=1)
+        about_uscan.grid_rowconfigure(0, weight=1)
+        about_uscan.grid_rowconfigure(1, weight=0)
+
+        image_path = os.path.join(os.getcwd(), "PfandApplication", "images", "versions", "uscan.png")
+
+        try:
+            img = Image.open(image_path).convert("RGBA")
+
+            bg_color_hex = about_uscan.cget("bg")
+            bg_color_rgb = about_uscan.winfo_rgb(bg_color_hex)
+            bg_color_rgba = tuple(c // 256 for c in bg_color_rgb) + (255,)
+
+            background = Image.new("RGBA", img.size, bg_color_rgba)
+            img = Image.alpha_composite(background, img)
+            img = img.resize((300, 100), Image.Resampling.LANCZOS)
+
+            uscan_img = ImageTk.PhotoImage(img)
+
+            # Garbage Collection Prevention
+            about_uscan.uscan_img = uscan_img
+
+            img_label = tk.Label(about_uscan, image=uscan_img)
+            img_label.grid(row=0, column=0, columnspan=2, pady=(15, 5), sticky='n')
+
+        except Exception as e:
+            print(f"Fehler beim Laden des Bildes: {e}")
+
+        label_uscan_app = tk.Label(
+            about_uscan,
+            text=(
+                "µScan - Der bessere Barcode Scanner\n"
+                "Version 1.1.0\n"
+                "µScan erfordert einen UI Reload (Strg+R) in der Root Anwendung\n"
+                "µScan ist für mehrere Barcodes gemacht, die in einer kurzen Zeit gescannt werden sollten\n"
+            ),
+            justify="left",
+            anchor="center"
+        )
+        label_uscan_app.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+
+        close_button = tk.Button(about_uscan, text="Schließen", command=about_uscan.destroy)
+        close_button.grid(row=2, column=0, sticky='ew', padx=10, pady=(0, 10))
+
     def create_menu(self):
         self.menubar = tk.Menu(self.root)
         self.root.config(menu=self.menubar)
@@ -522,7 +599,7 @@ class PfandCalculator:
         scanner_menu.add_command(label="Scanner öffnen", command=self.open_scanner_window, accelerator="Strg+B")
         scanner_menu.add_separator()
         scanner_menu.add_command(label="Öffne µScan", command=launch_pfand_scanner, accelerator="Strg+Shift+B") #µScan
-        scanner_menu.add_command(label="Über µScan", command=self.µScan_credits) #µScan credits
+        scanner_menu.add_command(label="Über µScan", command=self.uscan_credits) #µScan credits
         scanner_menu.add_separator()
         scanner_menu.add_command(label="Barcodes Exportieren (CSV)", command=self.export_barcodes_csv, accelerator="Strg+Shift+E")
 
@@ -1596,7 +1673,7 @@ class PfandCalculator:
         self.create_widgets()
 
     @staticmethod
-    def launch(check_for_update):
+    def launch(check_for_update) -> None:
      root = tk.Tk()
      app = PfandCalculator(root)
      
