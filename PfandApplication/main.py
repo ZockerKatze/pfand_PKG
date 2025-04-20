@@ -338,7 +338,19 @@ class PfandCalculator:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-    # Credit Section (Overall made nicer in Version 7.04.001) || Changed up a LOT in V8.05.501 (Pineapple)
+    """
+    About / Information Section
+    
+    Structure:
+    Main Credits    
+    TGTG Credits    
+    Updater Credits 
+    µScan Credits   
+    
+    QuickInfo:
+        Basically create Toplevel Windows which display Details about each "Integration"
+        Use a image for each one (path -> images/versions)
+    """
     def create_credits(self, future_icons):
         about_window = tk.Toplevel(self.root)
         about_window.title("Über Programm")
@@ -373,7 +385,7 @@ class PfandCalculator:
         label = tk.Label(
             about_window,
             text=(
-                "PfandApp V.8.15.000 - 'Pineapple'\n"
+                "PfandApp V.8.15.100 - 'Pineapple'\n"
                 "PaketVersion 1.1  ( PKG1.1 )\n\n"
                 "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
             ),
@@ -755,7 +767,8 @@ class PfandCalculator:
         total = sum(self.quantities[product] * self.PRICES[product] for product in self.products) # get total
         self.total_label.config(text=f"Gesamt: €{total:.2f}")
 
-    def load_deposit_history(self):
+    @staticmethod
+    def load_deposit_history():
         try:
             with open('deposit_history.json', 'r') as f:
                 return json.load(f)
@@ -1676,15 +1689,24 @@ class PfandCalculator:
     def launch(check_for_update) -> None:
      root = tk.Tk()
      app = PfandCalculator(root)
-     
-     if check_for_update is None:
-        root.after(500, root.destroy) # We do a lil bit of Trolling here
-     elif not check_for_update:
+
+     #Icon (Version Pineapple | not really sure if this works yet!)
+     #TODO: Check if this shit works (On Windows and Linux)
+     icon_path = os.path.join(os.getcwd(), "PfandApplication", "images", "versions", "pineapple.png")
+     ico = Image.open(icon_path)
+     photo = ImageTk.PhotoImage(ico)
+     root.iconphoto(False, photo)
+
+
+     if check_for_update is None: # If it's None then also pass (acts like False)
          pass
-     else:
+
+     elif not check_for_update: # If it isn't True pass
+         pass
+
+     else: # If is True then call the silent updater
          root.after(1, run_silent_update)
 
      root.mainloop()
 
-# Run AutoUpdates by default
 if __name__ == "__main__": PfandCalculator.launch(True)

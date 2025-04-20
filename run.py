@@ -1,5 +1,5 @@
 from PfandApplication import main
-if __name__ == "__main__": main.PfandCalculator.launch(False)
+if __name__ == "__main__": main.PfandCalculator.launch(None)
 
 """
 
@@ -8,7 +8,7 @@ if __name__ == "__main__": main.PfandCalculator.launch(False)
 *                                           *
 *   True    ->      Auto-Update             *
 *   False   ->      Dont Auto-Update        *
-*   None    ->      Idk check it :3         *
+*   None    ->      Act Like its False      *
 ********************************************/
 
 """
