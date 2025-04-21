@@ -385,8 +385,8 @@ class PfandCalculator:
         label = tk.Label(
             about_window,
             text=(
-                "PfandApp V.8.15.100 - 'Pineapple'\n"
-                "PaketVersion 1.1  ( PKG1.1 )\n\n"
+                "PfandApp V.8.15.200 - 'Pineapple'\n"
+                "PaketVersion 1.2  ( PKG1.2 )\n\n"
                 "Erstellt mit TKinter, CV2, Numpy, PyZbar, TGTG-API, TKCalendar, Datetime\n"
             ),
             padx=10,
@@ -562,9 +562,10 @@ class PfandCalculator:
             about_uscan,
             text=(
                 "µScan - Der bessere Barcode Scanner\n"
-                "Version 2.1.0\n"
+                "Version 2.2.2\n"
                 "µScan erfordert einen UI Reload (Strg+R) in der Root Anwendung\n"
                 "µScan ist für mehrere Barcodes gemacht, die in einer kurzen Zeit gescannt werden sollten\n"
+                "Beachte das µScan eine Kamera benötigt die mindestens 30FPS aufnehmen kann (Process-FPS können eingestellt werden!)"
             ),
             justify="left",
             anchor="center"
