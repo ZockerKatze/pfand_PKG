@@ -1,6 +1,6 @@
 # ♻️ Pfandrechner – Python Package
 
-**Version:** V.8.04.301-PKG1
+**Version:** Pineapple
 **License:**[MIT]()
 
 > ⚠️ **Note:** This package is based on the original [`pfand`](https://github.com/ZockerKatze/pfand) application, which has now been **archived**.
